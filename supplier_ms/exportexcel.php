@@ -69,7 +69,7 @@ $objPHPExcel->getProperties()->setCreator("PowerSales")
 							 ->setSubject("Office 2007 XLSX Document")
 							 ->setDescription("The document for Office 2007 XLSX, generated using PHP classes.")
 							 ->setKeywords("office 2007 openxml php")
-							 ->setCategory("合約項次表");
+							 ->setCategory("廠商資料");
 
 
 
@@ -82,25 +82,68 @@ $objPHPExcel->getProperties()->setCreator("PowerSales")
 			$objPHPExcel->getActiveSheet()->getStyle('F')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
-//匯出主要資料表
-$objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', '合約代號')
-            ->setCellValue('B1', '項次')
-            ->setCellValue('C1', '工作項目')
-            ->setCellValue('D1', '單位')
-            ->setCellValue('E1', '單價')
-            ->setCellValue('F1', '契約數量')
-            
-			;
+			//匯出主要資料表
+			$objPHPExcel->setActiveSheetIndex(0)
+							->setCellValue('A1', '廠商代號')
+							->setCellValue('B1', '廠商名稱')
+							->setCellValue('C1', '簡稱')
+							->setCellValue('D1', '營業類別')
+							->setCellValue('E1', '統編')
+							->setCellValue('F1', '公司帳戶')
+							->setCellValue('G1', '簡介')
+							->setCellValue('H1', '連絡電話')
+							->setCellValue('I1', '連絡電話2')
+							->setCellValue('J1', '傳真')
+							->setCellValue('K1', '城市')
+							->setCellValue('L1', '行政區')
+							->setCellValue('M1', '郵遞區號')
+							->setCellValue('N1', '地址')
+							->setCellValue('O1', '主要連絡人')
+							->setCellValue('P1', '性別(先生1/小姐2)')
+							->setCellValue('Q1', '職稱')
+							->setCellValue('R1', 'E-Mail');
+						
+						;
+			// ====== 套用樣式（黑底白字，置中，粗體） ======
+				$sheet = $objPHPExcel->getActiveSheet();
+				$sheet->getStyle('A1:R1')->applyFromArray([
+					'font' => [
+						'bold' => true,
+						'color' => ['rgb' => 'FFFFFF'] // 白字
+					],
+					'fill' => [
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'color' => ['rgb' => '000000'] // 黑底
+					],
+					'alignment' => [
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					],
+				]);
+				
+				// ====== 設定 G 欄（簡介）自動換行 ======
+				$sheet->getStyle('G')->getAlignment()->setWrapText(true);
 
 
 			//設置寬度
-			$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
-			$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
-			$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(73);
-			$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(45);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(13);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
-			$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(14);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(50);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(10);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(40);
 			
 			
 
@@ -110,7 +153,7 @@ $mDB = new MywebDB();
 
 $contract_id = $_GET['contract_id'];
 
-$Qry="SELECT * FROM contract_details WHERE contract_id = '$contract_id' ORDER BY contract_id";
+$Qry="SELECT * FROM supplier  ORDER BY supplier_id,auto_seq";
 
 $mDB->query($Qry);
 $total = $mDB->rowCount();
@@ -120,12 +163,25 @@ $line = 1;
 if ($total > 0) {
     while ($row=$mDB->fetchRow(2)) {
 
-		$contract_id = $row['contract_id'];
-		$seq = $row['seq'];
-		$work_project = $row['work_project'];
-		$unit = $row['unit'];
-		$unit_price = $row['unit_price'];	
-		$contracts_qty = $row['contracts_qty'];
+		$supplier_id    = $row['supplier_id'];
+		$supplier_name  = $row['supplier_name'];
+		$short_name     = $row['short_name'];
+		$type           = $row['type'];
+		$uniform_number = $row['uniform_number'];
+		$bank_account   = $row['bank_account'];
+		$brief_intro    = $row['brief_intro'];
+		$tel            = $row['tel'];
+		$tel_2          = $row['tel_2'];
+		$fax            = $row['fax'];
+		$county         = $row['county'];
+		$town           = $row['town'];
+		$zipcode        = $row['zipcode'];
+		$address        = $row['address'];
+		$contact        = $row['contact'];
+		$gender         = $row['gender'];
+		$title          = $row['title'];
+		$email          = $row['email'];
+		
 		
 		
 		$line++;
@@ -136,15 +192,42 @@ if ($total > 0) {
 		$d = 'D'.$line;
 		$e = 'E'.$line;
 		$f = 'F'.$line;
-		
+		$g = 'G'.$line;
+		$h = 'H'.$line;
+		$i = 'I'.$line;
+		$j = 'J'.$line;
+		$k = 'K'.$line;
+		$l = 'L'.$line;
+		$m = 'M'.$line;
+		$n = 'N'.$line;
+		$o = 'O'.$line;
+		$p = 'P'.$line;
+		$q = 'Q'.$line;
+		$r = 'R'.$line;
 		
 		$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue($a, $contract_id)
-					->setCellValue($b, $seq)
-					->setCellValue($c, $work_project)
-					->setCellValue($d, $unit)
-					->setCellValue($e, $unit_price)
-					->setCellValue($f, $contracts_qty)
+					->setCellValue($a, $supplier_id)
+					->setCellValue($b, $supplier_name)
+					->setCellValue($c, $short_name)
+					->setCellValue($d, $type)
+					->setCellValue($e, $uniform_number)
+					->setCellValue($f, $bank_account)
+					->setCellValue($g, $brief_intro)
+					->setCellValue($h, $tel)
+					->setCellValue($i, $tel_2)
+					->setCellValue($j, $fax)
+					->setCellValue($k, $county)
+					->setCellValue($l, $town)
+					->setCellValue($m, $zipcode)
+					->setCellValue($n, $address)
+					->setCellValue($o, $contact)
+					->setCellValue($p, $gender)
+					->setCellValue($q, $title)
+					->setCellValue($r, $email)
+
+		
+		
+		
 					
 					;
 	
@@ -234,7 +317,7 @@ $mDB->remove();
 
 
 // Rename worksheet
-$objPHPExcel->getActiveSheet()->setTitle("合約項次表");
+$objPHPExcel->getActiveSheet()->setTitle("廠商資料檔");
 
 
 
@@ -243,7 +326,7 @@ $objPHPExcel->getActiveSheet()->setTitle("合約項次表");
 //$objPHPExcel->setActiveSheetIndex(0);
 
 
-$xlsx_filename = "合約項次表.xls";
+$xlsx_filename = "廠商資料檔.xls";
 
 
 // Redirect output to a client’s web browser (Excel5)

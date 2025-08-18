@@ -76,44 +76,113 @@ if (!empty($_FILES)) {
 		$objPHPExcel->setActiveSheetIndex(0);
 		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
 
+foreach ($sheetData as $sheetIndex => $data) {
+    if ($sheetIndex > 1) {
 
-		foreach ($sheetData as $sheetIndex => $data) {
-			if ($sheetIndex > 1) {
+        $supplier_id    = htmlentities(trim($data["A"]), ENT_QUOTES, 'UTF-8'); // 廠商代號
+		if ($supplier_id === '') { continue; } // 沒有廠商代號就跳過
 
-				$contract_id = htmlentities(trim($data["A"]), ENT_QUOTES, 'UTF-8');
-				$seq = htmlentities(trim($data["B"]), ENT_QUOTES, 'UTF-8');
-				$work_project = htmlentities(trim($data["C"]), ENT_QUOTES, 'UTF-8');
-				$unit = htmlentities(trim($data["D"]), ENT_QUOTES, 'UTF-8');
-				$unit_price = htmlentities(trim($data["E"]), ENT_QUOTES, 'UTF-8');
-				$contracts_qty = htmlentities(trim($data["F"]), ENT_QUOTES, 'UTF-8');
+		$supplier_name  = htmlentities(trim($data["B"]), ENT_QUOTES, 'UTF-8'); // 廠商名稱
+		$short_name     = htmlentities(trim($data["C"]), ENT_QUOTES, 'UTF-8'); // 簡稱
+		$type           = htmlentities(trim($data["D"]), ENT_QUOTES, 'UTF-8'); // 營業類別
+		$uniform_number = htmlentities(trim($data["E"]), ENT_QUOTES, 'UTF-8'); // 統編
+		$bank_account   = htmlentities(trim($data["F"]), ENT_QUOTES, 'UTF-8'); // 公司帳戶
+		$brief_intro    = htmlentities(trim($data["G"]), ENT_QUOTES, 'UTF-8'); // 簡介
+		$tel            = htmlentities(trim($data["H"]), ENT_QUOTES, 'UTF-8'); // 電話
+		$tel_2          = htmlentities(trim($data["I"]), ENT_QUOTES, 'UTF-8'); // 電話2
+		$fax            = htmlentities(trim($data["J"]), ENT_QUOTES, 'UTF-8'); // 傳真
+		$county         = htmlentities(trim($data["K"]), ENT_QUOTES, 'UTF-8'); // 城市
+		$town           = htmlentities(trim($data["L"]), ENT_QUOTES, 'UTF-8'); // 行政區
+		$zipcode        = htmlentities(trim($data["M"]), ENT_QUOTES, 'UTF-8'); // 郵遞區號
+		$address        = htmlentities(trim($data["N"]), ENT_QUOTES, 'UTF-8'); // 地址
+		$contact        = htmlentities(trim($data["O"]), ENT_QUOTES, 'UTF-8'); // 主要連絡人
+		$gender         = htmlentities(trim($data["P"]), ENT_QUOTES, 'UTF-8'); // 性別
+		$title          = htmlentities(trim($data["Q"]), ENT_QUOTES, 'UTF-8'); // 職稱
+		$email          = htmlentities(trim($data["R"]), ENT_QUOTES, 'UTF-8'); // Email
 
+        // 檢查是否重複
+        $supplier_row = getkeyvalue2($site_db . "_info", "supplier", "supplier_id = '$supplier_id'", "count(*) as c_count");
+        $supplier_count = (int)($supplier_row['c_count'] ?? 0);
 
-				//檢查是否重複
-				$contract_row = getkeyvalue2($site_db . "_info", "contract_details", "contract_id = '$contract_id'", "count(*) as c_count");
-				$contract_count = $contract_row['c_count'];
-				if ($e_count <= 0) {
-					$Qry = "INSERT INTO contract_details (contract_id, seq, work_project, unit, unit_price, contracts_qty) 
-        					VALUES ('$contract_id', '$seq', '$work_project', '$unit', '$unit_price', '$contracts_qty')";
-					$mDB->query($Qry);
-				}
+        if ($supplier_count <= 0) {
+            // INSERT：不放 OAI_Rate / APF_Rate，使用資料表預設值；注意移除最後的逗號
+            $Qry = "INSERT INTO `supplier` (
+                        web_id,
+                        supplier_id,
+                        supplier_name,
+                        short_name,
+                        type,
+                        uniform_number,
+                        bank_account,
+                        brief_intro,
+                        tel,
+                        tel_2,
+                        fax,
+                        county,
+                        town,
+                        zipcode,
+                        address,
+                        contact,
+                        gender,
+                        title,
+                        email,
+                        makeby,
+                        create_date,
+                        last_modify
+                    ) VALUES (
+                        'sales.eshop',
+                        '$supplier_id',
+                        '$supplier_name',
+                        '$short_name',
+                        '$type',
+                        '$uniform_number',
+                        '$bank_account',
+                        '$brief_intro',
+                        '$tel',
+                        '$tel_2',
+                        '$fax',
+                        '$county',
+                        '$town',
+                        '$zipcode',
+                        '$address',
+                        '$contact',
+                        '$gender',
+                        '$title',
+                        '$email',
+                        'system',
+                        NOW(),
+                        NOW()
+                    )";
+            $mDB->query($Qry);
+        }
 
-				//更新 contract_details
-				$Qry = "UPDATE contract_details SET
-					seq = '$seq'
-					,work_project = '$work_project'
-					,unit = '$unit'
-					,unit_price = '$unit_price'
-					,contracts_qty = '$contracts_qty'
-					WHERE contract_id = '$contract_id' AND seq = '$seq'";
+        // UPDATE：移除 WHERE 前多餘逗號
+        $Qry = "UPDATE `supplier` SET
+                    supplier_name   = '$supplier_name',
+                    short_name      = '$short_name',
+                    type            = '$type',
+                    uniform_number  = '$uniform_number',
+                    bank_account    = '$bank_account',
+                    brief_intro     = '$brief_intro',
+                    tel             = '$tel',
+                    tel_2           = '$tel_2',
+                    fax             = '$fax',
+                    county          = '$county',
+                    town            = '$town',
+                    zipcode         = '$zipcode',
+                    address         = '$address',
+                    contact         = '$contact',
+                    gender          = '$gender',
+                    title           = '$title',
+                    email           = '$email',
+                    makeby          = 'system',
+                    last_modify     = NOW()
+                WHERE supplier_id = '$supplier_id'";
+        $mDB->query($Qry);
 
-				$mDB->query($Qry);
-				
-				$retval .= "<div>已建立更新 合約代號：" . $contract_id . "</div>";
-				
-
-			}
-
-		}
+        $retval .= "<div>已建立更新廠商資料：$supplier_id</div>";
+    }
+}
 
 
 		$mDB->remove();

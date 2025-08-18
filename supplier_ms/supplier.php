@@ -155,6 +155,13 @@ if ($cando=="Y") {
 $show_modify_btn=<<<EOT
 <div class="text-center my-2">
 	<div class="btn-group" role="group" style="margin:0;">
+	 	<button type="button" class="btn btn-primary text-nowrap" onclick="window.location.href='/index.php?ch=exportexcel&t=匯出廠商Excel資料檔&fm=$fm';">
+            <i class="bi bi-filetype-xls"></i>&nbsp;匯出Excel
+        </button>
+		 <button type="button" class="btn btn-primary text-nowrap" onclick="openfancybox_edit('/index.php?ch=importexcel&t=匯入廠商Excel資料檔&fm=$fm',850,350,'true');">
+            <i class="bi bi-filetype-xls"></i>&nbsp;匯入Excel
+        </button>
+
 		<button type="button" class="btn btn-danger text-nowrap" onclick="openfancybox_edit('/index.php?ch=add&t=$t&fm=$fm',800,'96%','');"><i class="bi bi-plus-circle"></i>&nbsp;新增資料</button>
 		<button type="button" class="btn btn-success text-nowrap" onclick="myDraw();"><i class="bi bi-arrow-repeat"></i>&nbsp;重整</button>
 	</div>

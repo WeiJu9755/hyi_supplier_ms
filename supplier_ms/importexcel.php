@@ -25,10 +25,10 @@ $timestamp = time();
 $token = md5('unique_salt'.$timestamp);
 
 $m_location		= "/smarty/templates/".$site_db."/".$templates;
-$uploadScript = $m_location."/sub_modal/project/contract_ms/excel_uploadify.php";
+$uploadScript = $m_location."/sub_modal/base/supplier_ms/excel_uploadify.php";
 
 //取得目錄
-$files_dir0 = "/webdata/".$site_db."/".$web_id."/project/contract_ms/excel";
+$files_dir0 = "/webdata/".$site_db."/".$web_id."/base/supplier_ms/excel";
 $files_dir1 = "/website".$files_dir0;
 //檢查目錄是否存在，不存在則建立
 if (!file_exists($files_dir1))

@@ -121,14 +121,14 @@ if (isset($_GET['sid']))
 			$smarty->assign('xajax_javascript', $xajax->getJavascript('/xajax/'));
 			break;
 		case 'importexcel':
-			$title = "匯入客戶Excel資料檔".$mt;
+			$title = "匯入廠商Excel資料檔".$mt;
 			$sid = "view01";
 			$modal = $m_location."/sub_modal/base/supplier_ms/importexcel.php";
 			include $modal;
 			$smarty->assign('show_center',$show_center);
 			break;
 		case 'exportexcel':
-			$title = "匯入客戶Excel資料檔".$mt;
+			$title = "匯出廠商Excel資料檔".$mt;
 			$sid = "view01";
 			$modal = $m_location."/sub_modal/base/supplier_ms/exportexcel.php";
 			include $modal;
