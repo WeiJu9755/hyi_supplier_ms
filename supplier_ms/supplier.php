@@ -114,6 +114,8 @@ $fm = $_GET['fm'];
 $t = $_GET['t'];
 $mc = $_GET['mc'];
 $sc = $_GET['sc'];
+$project_id = $_GET['project_id'];
+$auth_id = $_GET['auth_id'];
 
 $tb = "supplier";
 
@@ -136,6 +138,20 @@ $Cancel = getlang("取消");
 
 $pubweburl = "//".$domainname;
 
+$fellow_count = 0;
+//取得指定管理人數(小隊長)
+$pjmyfellow_row = getkeyvalue2($site_db."_info","pjmyfellow","web_id = '$web_id' and project_id = '$project_id' and auth_id = '$auth_id' and pro_id = '$pro_id'","count(*) as fellow_count");
+$fellow_count =$pjmyfellow_row['fellow_count'];
+if ($fellow_count == 0)
+	$fellow_count = "";
+
+$pjItemManager = false;
+//檢查是否為指定管理人(小隊長)
+$pjmyfellow_row = getkeyvalue2($site_db."_info","pjmyfellow","web_id = '$web_id' and project_id = '$project_id' and auth_id = '$auth_id' and pro_id = '$pro_id' and member_no = '$memberID'","count(*) as enable_count");
+$enable_count =$pjmyfellow_row['enable_count'];
+if ($enable_count > 0)
+	$pjItemManager = true;
+
 //設定權限
 $cando = "N";
 if ($powerkey=="A") {
@@ -149,9 +165,27 @@ if ($powerkey=="A") {
 		$cando = "Y";
 	}
 }
+// 指定管理人 → 只顯示按鈕，不顯示 admin list
+$show_admin_list = "";
+if ($super_admin=="Y") {
+    $show_admin_list=<<<EOT
+<div class="text-center">
+	<div class="btn-group me-2 mb-2" role="group">
+		<a role="button" class="btn btn-light" href="javascript:void(0);" onclick="openfancybox_edit('/index.php?ch=fellowlist&project_id=$project_id&auth_id=$auth_id&pro_id=$pro_id&t=指定管理人&fm=base',850,'96%',true);" title="指定管理人">
+			<i class="bi bi-shield-fill-check size14 red inline me-2 vmiddle"></i>
+			<div class="inline size12 me-2">指定管理人</div>
+			<div class="inline red weight vmiddle">$fellow_count</div>
+		</a>
+	</div>
+</div>
+EOT;
+}
 
-if ($cando=="Y") {
-	if (($super_admin=="Y") && ($admin_readonly <> "Y")) {
+
+if ($cando=="Y" || $pjItemManager) {
+
+	if (($super_admin=="Y" && $admin_readonly <> "Y") || $pjItemManager) {
+
 $show_modify_btn=<<<EOT
 <div class="text-center my-2">
 	<div class="btn-group" role="group" style="margin:0;">
@@ -162,16 +196,26 @@ $show_modify_btn=<<<EOT
             <i class="bi bi-filetype-xls"></i>&nbsp;匯入Excel
         </button>
 
-		<button type="button" class="btn btn-danger text-nowrap" onclick="openfancybox_edit('/index.php?ch=add&t=$t&fm=$fm',800,'96%','');"><i class="bi bi-plus-circle"></i>&nbsp;新增資料</button>
-		<button type="button" class="btn btn-success text-nowrap" onclick="myDraw();"><i class="bi bi-arrow-repeat"></i>&nbsp;重整</button>
+		<button type="button" class="btn btn-danger text-nowrap" onclick="openfancybox_edit('/index.php?ch=add&t=$t&fm=$fm',800,'96%','');">
+            <i class="bi bi-plus-circle"></i>&nbsp;新增資料
+        </button>
+		<button type="button" class="btn btn-success text-nowrap" onclick="myDraw();">
+            <i class="bi bi-arrow-repeat"></i>&nbsp;重整
+        </button>
 	</div>
+
+
 </div>
+$show_admin_list
 EOT;
+
 	}
 } else {
+
 $show_modify_btn=<<<EOT
 <div class="size14 red m-auto text-center my-2 px-2 py-1 border border-danger" style="width:100px;">唯讀</div>
 EOT;
+
 }
 
 
