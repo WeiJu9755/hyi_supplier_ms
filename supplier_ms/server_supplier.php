@@ -69,7 +69,7 @@
 	/*
 	 * Ordering
 	 */
-	$sOrder = "ORDER BY a.auto_seq ";
+	$sOrder = "ORDER BY a.supplier_id ";
 	/*
 	if ( isset( $_GET['iSortCol_0'] ) )
 	{
