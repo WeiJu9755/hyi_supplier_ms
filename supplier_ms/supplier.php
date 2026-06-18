@@ -255,6 +255,67 @@ $show_center=<<<EOT
 	margin: 5px 0 0 0 !Important;
 }
 
+.supplier-contact {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	line-height: 1.35;
+}
+
+.supplier-contact__name {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 4px 8px;
+}
+
+.supplier-contact__person {
+	font-size: 15px;
+	font-weight: 700;
+	color: #0d6efd;
+}
+
+.supplier-contact__meta {
+	font-size: 12px;
+	color: #6c757d;
+}
+
+.supplier-contact__title {
+	display: inline-block;
+	max-width: 120px;
+	padding: 1px 6px;
+	border: 1px solid #d8dee4;
+	border-radius: 4px;
+	background: #f8f9fa;
+	color: #495057;
+	font-size: 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+.supplier-contact__row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 20px;
+	color: #212529;
+	font-size: 13px;
+	word-break: break-word;
+}
+
+.supplier-contact__row i {
+	width: 16px;
+	color: #6c757d;
+	text-align: center;
+}
+
+.supplier-contact__empty {
+	color: #adb5bd;
+	font-size: 13px;
+}
+
 </style>
 
 $list_view
@@ -302,17 +363,50 @@ $list_view
 				else if (aData[11] == "2")
 					m_gender = "先生";
 				
-				var m_contact = '';
+				var contact_name = '';
 				if (aData[10] != null && aData[10] != '')
-					var m_contact = "<div class=\"inline me-2\"><b>"+aData[10]+"</b> <span class=\"text-nowrap\">"+m_gender+"</span></div><div class=\"inline\">"+aData[12]+"</div>";
+					contact_name = '<span class="supplier-contact__person">'+aData[10]+'</span>';
+
+				var contact_gender = '';
+				if (m_gender != '')
+					contact_gender = '<span class="supplier-contact__meta">'+m_gender+'</span>';
+
+				var contact_title = '';
+				if (aData[12] != null && aData[12] != '')
+					contact_title = '<span class="supplier-contact__title" title="'+aData[12]+'">'+aData[12]+'</span>';
 
 				var tel = '';
 				if (aData[13] != null && aData[13] != '')
-					tel = '<div class="inline me-2">'+aData[13]+'</div>';
+					tel = '<div class="supplier-contact__row"><i class="bi bi-telephone"></i><span>'+aData[13]+'</span></div>';
 
 				var email = '';
 				if (aData[14] != null && aData[14] != '')
-					email = '<div class="inline me-2">'+aData[14]+'</div>';
+					email = '<div class="supplier-contact__row"><i class="bi bi-envelope"></i><span>'+aData[14]+'</span></div>';
+
+				var m_contact = '<div class="supplier-contact">';
+				if (contact_name != '' || contact_gender != '' || contact_title != '')
+					m_contact += '<div class="supplier-contact__name">'+contact_name+contact_gender+contact_title+'</div>';
+				if (tel != '' || email != '')
+					m_contact += tel+email;
+				if (contact_name == '' && contact_gender == '' && contact_title == '' && tel == '' && email == '')
+					m_contact += '<div class="supplier-contact__empty">未填寫</div>';
+				m_contact += '</div>';
+
+				var bank_account = '';
+				if (aData[17] != null && aData[17] != '')
+					bank_account = '<div class="inline me-3 text-nowrap">匯款帳戶：<span class="blue02 weight">'+aData[17]+'</span></div>';
+
+				var bank_account_no = '';
+				if (aData[18] != null && aData[18] != '')
+					bank_account_no = '<div class="inline me-3 text-nowrap">匯款帳號：<span class="blue02 weight">'+aData[18]+'</span></div>';
+
+				var bank_account_name = '';
+				if (aData[19] != null && aData[19] != '')
+					bank_account_name = '<div class="inline me-3 text-nowrap">匯款戶名：<span class="blue02 weight">'+aData[19]+'</span></div>';
+
+				var bank_remit_code = '';
+				if (aData[20] != null && aData[20] != '')
+					bank_remit_code = '<div class="inline text-nowrap">匯款代碼：<span class="blue02 weight">'+aData[20]+'</span></div>';
 					
 				var zipcode = '';
 				if (aData[3] != null && aData[3] != '')
@@ -336,10 +430,11 @@ $list_view
 					
 					
 				var m_info = '<div><span class="size12 weight text-nowrap me-1 vbottom">'+zipcode+'</span> <span class="size12 weight text-nowrap vbottom">'+county+'</span><span class="size12 weight text-nowrap vbottom">'+town+'</span> <span class="weight">'+address+'</span></div>'
+							+'<div>'+bank_account+bank_account_no+bank_account_name+bank_remit_code+'</div>'
 							+'<div class="inline">'+files_total+'</div>';
 
 				$('td:eq(0)', nRow).html( m_supplier );
-				$('td:eq(1)', nRow).html( m_contact+'<div>'+tel+email+'</div>' );
+				$('td:eq(1)', nRow).html( m_contact );
 				$('td:eq(2)', nRow).html( m_info );
 
 				var show_btn = '';

@@ -80,6 +80,9 @@ $objPHPExcel->getProperties()->setCreator("PowerSales")
 			$objPHPExcel->getActiveSheet()->getStyle('C')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$objPHPExcel->getActiveSheet()->getStyle('E')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$objPHPExcel->getActiveSheet()->getStyle('F')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objPHPExcel->getActiveSheet()->getStyle('S')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objPHPExcel->getActiveSheet()->getStyle('T')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objPHPExcel->getActiveSheet()->getStyle('U')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
 
 			//匯出主要資料表
@@ -89,7 +92,7 @@ $objPHPExcel->getProperties()->setCreator("PowerSales")
 							->setCellValue('C1', '簡稱')
 							->setCellValue('D1', '營業類別')
 							->setCellValue('E1', '統編')
-							->setCellValue('F1', '公司帳戶')
+							->setCellValue('F1', '匯款帳戶')
 							->setCellValue('G1', '簡介')
 							->setCellValue('H1', '連絡電話')
 							->setCellValue('I1', '連絡電話2')
@@ -101,12 +104,15 @@ $objPHPExcel->getProperties()->setCreator("PowerSales")
 							->setCellValue('O1', '主要連絡人')
 							->setCellValue('P1', '性別(先生1/小姐2)')
 							->setCellValue('Q1', '職稱')
-							->setCellValue('R1', 'E-Mail');
+							->setCellValue('R1', 'E-Mail')
+							->setCellValue('S1', '匯款帳號')
+							->setCellValue('T1', '匯款戶名')
+							->setCellValue('U1', '匯款代碼');
 						
 						;
 			// ====== 套用樣式（黑底白字，置中，粗體） ======
 				$sheet = $objPHPExcel->getActiveSheet();
-				$sheet->getStyle('A1:R1')->applyFromArray([
+				$sheet->getStyle('A1:U1')->applyFromArray([
 					'font' => [
 						'bold' => true,
 						'color' => ['rgb' => 'FFFFFF'] // 白字
@@ -144,6 +150,9 @@ $objPHPExcel->getProperties()->setCreator("PowerSales")
 			$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(10);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(10);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(40);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(30);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('T')->setWidth(30);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('U')->setWidth(20);
 			
 			
 
@@ -169,6 +178,9 @@ if ($total > 0) {
 		$type           = $row['type'];
 		$uniform_number = $row['uniform_number'];
 		$bank_account   = $row['bank_account'];
+		$bank_account_no = $row['bank_account_no'];
+		$bank_account_name = $row['bank_account_name'];
+		$bank_remit_code = $row['bank_remit_code'];
 		$brief_intro    = $row['brief_intro'];
 		$tel            = $row['tel'];
 		$tel_2          = $row['tel_2'];
@@ -204,6 +216,9 @@ if ($total > 0) {
 		$p = 'P'.$line;
 		$q = 'Q'.$line;
 		$r = 'R'.$line;
+		$s = 'S'.$line;
+		$t = 'T'.$line;
+		$u = 'U'.$line;
 		
 		$objPHPExcel->setActiveSheetIndex(0)
 					->setCellValue($a, $supplier_id)
@@ -224,6 +239,9 @@ if ($total > 0) {
 					->setCellValue($p, $gender)
 					->setCellValue($q, $title)
 					->setCellValue($r, $email)
+					->setCellValue($s, $bank_account_no)
+					->setCellValue($t, $bank_account_name)
+					->setCellValue($u, $bank_remit_code)
 
 		
 		

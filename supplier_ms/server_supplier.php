@@ -30,7 +30,7 @@
 //	$aColumns = array( 'auto_seq','web_id','supplier_id','supplier_name','contact','gender','title','county','town','zipcode','address','tel','fax','email','mobile_no','owner','owner_gender','owner_title','short_name');
 	
 	$aColumns = array( 'a.supplier_id','a.supplier_name','a.short_name','a.zipcode','a.county','a.town','a.address','a.auto_seq','a.web_id','a.makeby','a.contact'
-				,'a.gender','a.title','a.tel','a.email','a.fax','a.uniform_number');
+				,'a.gender','a.title','a.tel','a.email','a.fax','a.uniform_number','a.bank_account','a.bank_account_no','a.bank_account_name','a.bank_remit_code');
 	
 	/* Indexed column (used for fast and accurate table cardinality) */
 	$sIndexColumn = "auto_seq";

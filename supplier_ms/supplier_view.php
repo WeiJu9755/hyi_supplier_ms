@@ -60,6 +60,9 @@ if ($total > 0) {
 	$brief_intro = str_replace("\n","<br>",htmlspecialchars_decode($row['brief_intro']));
 	$uniform_number = $row['uniform_number'];
 	$bank_account = $row['bank_account'];
+	$bank_account_no = $row['bank_account_no'];
+	$bank_account_name = $row['bank_account_name'];
+	$bank_remit_code = $row['bank_remit_code'];
 	$contact = $row['contact'];
 	$gender = $row['gender'];
 	$title = $row['title'];
@@ -203,7 +206,10 @@ $show_details=<<<EOT
 			<td>
 				<div class="mylabel_left">
 					<div class="inline" style="min-width:150px;margin-right:10px;">$uniform_number</div>
-					<div class="inline">公司帳戶 $bank_account</div>
+					<div class="inline me-3">匯款帳戶 $bank_account</div>
+					<div class="inline">匯款帳號 $bank_account_no</div>
+					<div class="inline me-3">匯款戶名 $bank_account_name</div>
+					<div class="inline">匯款代碼 $bank_remit_code</div>
 				</div>
 			</td>
 		</tr>

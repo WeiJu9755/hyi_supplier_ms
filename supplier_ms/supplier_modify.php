@@ -63,6 +63,9 @@ function SaveValue($aFormValues){
 		$type 					= htmlspecialchars(trim($aFormValues['type']), ENT_QUOTES, 'UTF-8');
 		$uniform_number 		= trim($aFormValues['uniform_number']);
 		$bank_account 			= trim($aFormValues['bank_account']);
+		$bank_account_no 		= trim($aFormValues['bank_account_no']);
+		$bank_account_name 		= trim($aFormValues['bank_account_name']);
+		$bank_remit_code 		= trim($aFormValues['bank_remit_code']);
 		$brief_intro 			= htmlspecialchars(trim($aFormValues['brief_intro']), ENT_QUOTES, 'UTF-8');
 		$contact 				= trim($aFormValues['contact']);
 		$gender					= trim($aFormValues['gender']);
@@ -86,6 +89,9 @@ function SaveValue($aFormValues){
 				,type				= '$type'
 				,uniform_number		= '$uniform_number'
 				,bank_account		= '$bank_account'
+				,bank_account_no	= '$bank_account_no'
+				,bank_account_name	= '$bank_account_name'
+				,bank_remit_code	= '$bank_remit_code'
 				,brief_intro		= '$brief_intro'
 				,contact			= '$contact'
 				,gender				= '$gender'
@@ -134,6 +140,9 @@ if ($total > 0) {
 	$type = $row['type'];
 	$uniform_number = $row['uniform_number'];
 	$bank_account = $row['bank_account'];
+	$bank_account_no = $row['bank_account_no'];
+	$bank_account_name = $row['bank_account_name'];
+	$bank_remit_code = $row['bank_remit_code'];
 	$brief_intro = $row['brief_intro'];
 	$contact = $row['contact'];
 	$gender = $row['gender'];
@@ -297,9 +306,19 @@ $style_css
 						<div class="field_div1">統編:</div> 
 						<div class="field_div2">
 							<input type="text" class="inputtext mb-2" id="uniform_number" name="uniform_number" size="20" maxlength="50" style="width:100%;max-width:200px;" value="$uniform_number" onchange="setEdit();"/>
-							&nbsp;
-							<div class="inline mylabel">公司帳戶:</div>
-							<input type="text" class="inputtext" id="bank_account" name="bank_account" size="20" maxlength="50" style="width:100%;max-width:200px;" value="$bank_account" onchange="setEdit();"/>
+						</div> 
+					</div>
+					<div>
+						<div class="field_div1">匯款資訊:</div> 
+						<div class="field_div2">
+							<div class="inline mylabel">匯款帳戶:</div>
+							<input type="text" class="inputtext mb-2" id="bank_account" name="bank_account" size="20" maxlength="100" style="width:100%;max-width:200px;" value="$bank_account" onchange="setEdit();"/>
+							<div class="inline mylabel">匯款帳號:</div>
+							<input type="text" class="inputtext mb-2" id="bank_account_no" name="bank_account_no" size="20" maxlength="100" style="width:100%;max-width:200px;" value="$bank_account_no" onchange="setEdit();"/>
+							<div class="inline mylabel">匯款戶名:</div>
+							<input type="text" class="inputtext mb-2" id="bank_account_name" name="bank_account_name" size="20" maxlength="100" style="width:100%;max-width:200px;" value="$bank_account_name" onchange="setEdit();"/>
+							<div class="inline mylabel">匯款代碼:</div>
+							<input type="text" class="inputtext" id="bank_remit_code" name="bank_remit_code" size="20" maxlength="50" style="width:100%;max-width:200px;" value="$bank_remit_code" onchange="setEdit();"/>
 						</div> 
 					</div>
 					<div>

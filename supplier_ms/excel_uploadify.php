@@ -86,7 +86,7 @@ foreach ($sheetData as $sheetIndex => $data) {
 		$short_name     = htmlentities(trim($data["C"]), ENT_QUOTES, 'UTF-8'); // 簡稱
 		$type           = htmlentities(trim($data["D"]), ENT_QUOTES, 'UTF-8'); // 營業類別
 		$uniform_number = htmlentities(trim($data["E"]), ENT_QUOTES, 'UTF-8'); // 統編
-		$bank_account   = htmlentities(trim($data["F"]), ENT_QUOTES, 'UTF-8'); // 公司帳戶
+		$bank_account   = htmlentities(trim($data["F"]), ENT_QUOTES, 'UTF-8'); // 匯款帳戶
 		$brief_intro    = htmlentities(trim($data["G"]), ENT_QUOTES, 'UTF-8'); // 簡介
 		$tel            = htmlentities(trim($data["H"]), ENT_QUOTES, 'UTF-8'); // 電話
 		$tel_2          = htmlentities(trim($data["I"]), ENT_QUOTES, 'UTF-8'); // 電話2
@@ -99,6 +99,9 @@ foreach ($sheetData as $sheetIndex => $data) {
 		$gender         = htmlentities(trim($data["P"]), ENT_QUOTES, 'UTF-8'); // 性別
 		$title          = htmlentities(trim($data["Q"]), ENT_QUOTES, 'UTF-8'); // 職稱
 		$email          = htmlentities(trim($data["R"]), ENT_QUOTES, 'UTF-8'); // Email
+		$bank_account_no = htmlentities(trim(isset($data["S"]) ? $data["S"] : ""), ENT_QUOTES, 'UTF-8'); // 匯款帳號
+		$bank_account_name = htmlentities(trim(isset($data["T"]) ? $data["T"] : ""), ENT_QUOTES, 'UTF-8'); // 匯款戶名
+		$bank_remit_code = htmlentities(trim(isset($data["U"]) ? $data["U"] : ""), ENT_QUOTES, 'UTF-8'); // 匯款代碼
 
         // 檢查是否重複
         $supplier_row = getkeyvalue2($site_db . "_info", "supplier", "supplier_id = '$supplier_id'", "count(*) as c_count");
@@ -114,6 +117,9 @@ foreach ($sheetData as $sheetIndex => $data) {
                         type,
                         uniform_number,
                         bank_account,
+                        bank_account_no,
+                        bank_account_name,
+                        bank_remit_code,
                         brief_intro,
                         tel,
                         tel_2,
@@ -137,6 +143,9 @@ foreach ($sheetData as $sheetIndex => $data) {
                         '$type',
                         '$uniform_number',
                         '$bank_account',
+                        '$bank_account_no',
+                        '$bank_account_name',
+                        '$bank_remit_code',
                         '$brief_intro',
                         '$tel',
                         '$tel_2',
@@ -163,6 +172,9 @@ foreach ($sheetData as $sheetIndex => $data) {
                     type            = '$type',
                     uniform_number  = '$uniform_number',
                     bank_account    = '$bank_account',
+                    bank_account_no = '$bank_account_no',
+                    bank_account_name = '$bank_account_name',
+                    bank_remit_code = '$bank_remit_code',
                     brief_intro     = '$brief_intro',
                     tel             = '$tel',
                     tel_2           = '$tel_2',
